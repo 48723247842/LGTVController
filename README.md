@@ -3,6 +3,8 @@
 ### Based on https://github.com/TheRealLink/pylgtv
 
 ```
+from LGTVController import LGTVController
+
 x = LGTVController({
 	"ip_address": "192.168.1.99" ,
 	"port": 3000 ,
