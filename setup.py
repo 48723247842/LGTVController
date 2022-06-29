@@ -13,7 +13,7 @@ with pathlib.Path( "./LGTVController/requirements.txt" ).open() as requirements_
 
 setuptools.setup(
 	name="LGTVController",
-	version="0.0.1",
+	version="0.0.2",
 	author="7435171",
 	author_email="48723247842@protonmail.com",
 	description="LG TV Controller",
@@ -24,9 +24,10 @@ setuptools.setup(
 		"License :: OSI Approved :: MIT License",
 		"Operating System :: OS Independent",
 	],
-	include_package_data = True ,
+	include_package_data=True ,
 	include=[ "handshake.json" , "endpoints.json" ] ,
 	excluded=[ "pypiUpload.sh" , "personal.yaml" ] ,
+	package_data={ "LGTVController" : [ "handshake.json" , "endpoints.json" ] } ,
 	python_requires='>=3.6',
 	install_requires=install_requires
 )
