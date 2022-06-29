@@ -4,6 +4,7 @@
 
 ```
 from LGTVController import LGTVController # python3 -m pip install LGTVController
+from pprint import pprint
 
 x = LGTVController({
 	"ip_address": "192.168.1.99" ,
