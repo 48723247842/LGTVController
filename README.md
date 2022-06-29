@@ -3,7 +3,7 @@
 ### Based on https://github.com/TheRealLink/pylgtv
 
 ```
-from LGTVController import LGTVController
+from LGTVController import LGTVController # python3 -m pip install LGTVController
 
 x = LGTVController({
 	"ip_address": "192.168.1.99" ,
