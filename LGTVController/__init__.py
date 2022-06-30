@@ -828,14 +828,3 @@ class LGTVController:
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
-
-if __name__ == "__main__":
-	x = LGTVController({
-		"ip_address": "192.168.1.6" ,
-		"port": 3000 ,
-		"mac_address": "B4:B2:91:45:F7:B2" ,
-		"client_key": "18370ed9f27f11668f899ca71e479bc6" ,
-		"always_wakeup": True
-	})
-	pprint( x.get_current_app() )
-	pprint( x.power_off() )
