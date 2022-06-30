@@ -5,7 +5,7 @@
 	"get_volume": "audio/getVolume" ,
 	"set_volume": "audio/setVolume" ,
 	"volume_up": "audio/volumeUp" ,
-	"volume_dow": "audio/volumeDown" ,
+	"volume_down": "audio/volumeDown" ,
 	"get_current_app_info": "com.webos.applicationManager/getForegroundAppInfo" ,
 	"launch_app": "com.webos.applicationManager/launch" ,
 	"get_apps": "com.webos.applicationManager/listLaunchPoints" ,
@@ -23,6 +23,10 @@
 	"media_close": "media.viewer/close" ,
 	"power_off": "system/turnOff" ,
 	"power_on": "system/turnOn" ,
+	"screen_off": "com.webos.service.tv.power/turnOffScreen" ,
+	"screen_on": "com.webos.service.tv.power/turnOnScreen" ,
+	"screen_off_alt": "com.webos.service.tvpower/power/turnOffScreen" ,
+	"screen_on_alt": "com.webos.service.tvpower/power/turnOnScreen" ,
 	"show_message": "system.notifications/createToast" ,
 	"launcher_close": "system.launcher/close" ,
 	"get_app_state": "system.launcher/getAppState" ,
@@ -36,5 +40,12 @@
 	"get_inputs": "tv/getExternalInputList" ,
 	"set_channel": "tv/openChannel" ,
 	"set_input": "tv/switchInput" ,
-	"close_web_app": "webapp/closeWebApp"
+	"close_web_app": "webapp/closeWebApp" ,
+	"app_ids": {
+		"live_tv": "com.webos.app.livetv" ,
+		"youtube": "youtube.leanback.v4" ,
+		"netflix": "netflix" ,
+		"amazon": "amzaon" ,
+		"airplay": "airplay"
+	}
 }

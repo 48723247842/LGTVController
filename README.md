@@ -16,3 +16,7 @@ x = LGTVController({
 pprint( x.get_current_app() )
 pprint( x.power_off() )
 ```
+
+### Todo
+- Press Remote Buttons : https://github.com/merdok/homebridge-webos-tv/blob/master/lib/LgTvController.js#L513
+- Set Settings : https://github.com/merdok/homebridge-webos-tv/blob/master/lib/LgTvController.js#L1155

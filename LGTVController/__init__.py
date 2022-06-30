@@ -13,6 +13,16 @@ from wakeonlan import send_magic_packet
 import socket
 import websocket # pip install websocket-client
 
+import yaml # pip install pyyaml
+
+def write_yaml( file_path , python_object ):
+	with open( file_path , 'w' , encoding='utf-8' ) as f:
+		yaml.dump( python_object , f )
+
+def read_yaml( file_path ):
+	with open( file_path ) as f:
+		return yaml.safe_load( f )
+
 def write_json( file_path , python_object ):
 	with open( file_path , "w" , encoding="utf-8" ) as f:
 		json.dump( python_object , f , ensure_ascii=False , indent=4 )
@@ -31,8 +41,11 @@ class LGTVController:
 		self.websocket_url = f"ws://{self.config.ip_address}:{self.config.port}/"
 		self.handshake_data_file_path = Path( __file__ ).parent.joinpath( "handshake.json" )
 		self.handshake_data = read_json( self.handshake_data_file_path )
-		self.endpoints_file_path = Path( __file__ ).parent.joinpath( "endpoints.json" )
-		self.endpoints = Box( read_json( self.endpoints_file_path ) )
+		# self.endpoints_file_path = Path( __file__ ).parent.joinpath( "endpoints.json" )
+		# self.endpoints = Box( read_json( self.endpoints_file_path ) )
+		self.endpoints_file_path = Path( __file__ ).parent.joinpath( "endpoints.yaml" )
+		# self.endpoints = Box( read_yaml( self.endpoints_file_path ) )
+		self.endpoints = Box( read_yaml( self.endpoints_file_path ) )
 		if "client_key" not in self.config:
 			print( "No Client Key Provided , Re-Pairing with TV" )
 			# self.pair()
