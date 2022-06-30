@@ -162,6 +162,17 @@ class LGTVController:
 		else:
 			return f"lgtv_{random.randint( 1 , 100 )}"
 
+	def websocket_send_json( self , message={} ):
+		try:
+			self.open_websocket()
+			self.handshake()
+			self.ws.send( json.dumps( message ) )
+			result = self.ws.recv()
+			self.close_websocket()
+		except Exception as e:
+			print( stackprinter.format() )
+			return False
+
 	def send_message( self , message="hola" , icon_path=None ):
 		try:
 			icon_encoded_string = ""
@@ -170,9 +181,7 @@ class LGTVController:
 				icon_extension = os.path.splitext( icon_path )[ 1 ][ 1: ]
 				with open( icon_path , "rb" ) as icon_file:
 					icon_encoded_string = base64.b64encode( icon_file.read() ).decode( "ascii" )
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			result = self.websocket_send_json({
 				"id":  self.generate_message_id( "send_message" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.show_message}" ,
@@ -181,9 +190,8 @@ class LGTVController:
 					"iconData": icon_encoded_string ,
 					"iconExtension": icon_extension
 				} ,
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
+			})
+			return result
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
@@ -191,62 +199,45 @@ class LGTVController:
 	# Apps
 	def get_apps( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "get_apps" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.get_apps}" ,
 				"payload": {} ,
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def get_current_app( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "get_current_app" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.get_current_app_info}" ,
 				"payload": {} ,
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def launch_app( self , app_name="netflix" ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "launch_app" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.launch}" ,
 				"payload": {
 					"id": app_name
 				} ,
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def launch_app_with_params( self , app_name="netflix" , params={} ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "launch_app_with_params" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.launch}" ,
@@ -254,19 +245,14 @@ class LGTVController:
 					"id": app_name ,
 					"params": params
 				} ,
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def launch_app_with_with_content_id( self , app_name="netflix" , content_id=False ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "launch_app_with_content_id" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.launch}" ,
@@ -274,29 +260,21 @@ class LGTVController:
 					"id": app_name ,
 					"contentId": content_id
 				} ,
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def close_app( self , app_name="netflix" ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "close_app" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.launch}" ,
 				"payload": {
 					"id": app_name
 				}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
@@ -304,67 +282,48 @@ class LGTVController:
 	# Services
 	def get_services( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "get_services" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.get_services}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def get_software_info( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "get_software_info" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.get_software_info}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def power_off( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "power_off" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.power_off}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def power_on( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			result = self.websocket_send_json({
 				"id":  self.generate_message_id( "power_on" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.power_on}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
+			})
 			if "mac_address" in self.config:
 				send_magic_packet( self.config.mac_address )
 			return result
@@ -375,34 +334,24 @@ class LGTVController:
 	# 3D Mode
 	def turn_3d_on( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "turn_3d_on" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.x3d_on}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def turn_3d_off( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "turn_3d_off" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.x3d_off}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
@@ -410,17 +359,12 @@ class LGTVController:
 	# Inputs
 	def get_inputs( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "get_inputs" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.get_inputs}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
@@ -434,19 +378,14 @@ class LGTVController:
 
 	def set_input( self , input_name="HDMI-1" ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "set_input" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.set_input}" ,
 				"payload": {
 					"inputId": input_name
 				}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
@@ -454,17 +393,12 @@ class LGTVController:
 	# Audio
 	def get_audio_status( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "get_audio_status" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.get_audio_status}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
@@ -475,89 +409,64 @@ class LGTVController:
 
 	def set_mute( self , mute=True ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "set_mute" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.set_mute}" ,
 				"payload": {
 					"mute": mute
 				}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def get_volume( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "get_volume" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.get_volume}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def set_volume( self , volume=11 ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "set_volume" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.set_volume}" ,
 				"payload": {
 					"volume": volume
 				}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def volume_up( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "volume_up" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.volume_up}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def volume_down( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "volume_down" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.volume_down}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
@@ -565,104 +474,74 @@ class LGTVController:
 	# TV Channel
 	def channel_up( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "channel_up" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.tv_channel_up}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def channel_down( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "channel_down" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.tv_channel_down}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def get_channels( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "get_channels" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.get_tv_channels}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def get_current_channel( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "get_current_channel" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.get_current_channel}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def get_channel_info( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "get_channel_info" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.get_channel_info}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def set_channel( self , channel=3 ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "set_channel" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.set_channel}" ,
 				"payload": {
 					"channelId": channel
 				}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
@@ -670,102 +549,72 @@ class LGTVController:
 	# Media control
 	def play( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "play" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.media_play}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def pause( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "pause" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.media_pause}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def stop( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "stop" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.media_stop}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def close( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "close" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.media_close}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def rewind( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "rewind" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.media_rewind}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def fast_forward( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "fast_forward" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.media_fast_forward}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
@@ -773,34 +622,24 @@ class LGTVController:
 	# Keys
 	def send_enter_key( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "send_enter_key" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.send_enter}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def send_delete_key( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "send_delete_key" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.send_delete}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
@@ -808,36 +647,43 @@ class LGTVController:
 	# Web
 	def open_url( self , url="https://www.windy.com/-Thunderstorms-thunder?thunder,39.793,-80.717,6" ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "open_url" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.open}" ,
 				"payload": {
 					"target": url
 				}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
 
 	def close_web( self ):
 		try:
-			self.open_websocket()
-			self.handshake()
-			self.ws.send(json.dumps({
+			return self.websocket_send_json({
 				"id":  self.generate_message_id( "close_web" ) ,
 				"type": "request" ,
 				"uri": f"ssap://{self.endpoints.close_web_app}" ,
 				"payload": {}
-			}))
-			result = self.ws.recv()
-			self.close_websocket()
-			return result
+			})
 		except Exception as e:
 			print( stackprinter.format() )
 			return False
+
+	# def press_button( self , button_name="MENU" ):
+	# 	try:
+	# 		self.open_websocket()
+	# 		self.handshake()
+	# 		self.ws.send(json.dumps({
+	# 			"id":  self.generate_message_id( "close_web" ) ,
+	# 			"type": "request" ,
+	# 			"uri": f"ssap://{self.endpoints.close_web_app}" ,
+	# 			"payload": {}
+	# 		}))
+	# 		result = self.ws.recv()
+	# 		self.close_websocket()
+	# 		return result
+	# 	except Exception as e:
+	# 		print( stackprinter.format() )
+	# 		return False
